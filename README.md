@@ -46,6 +46,16 @@ Quality is 80 and it never alters.
 
 ## Getting Started
 
+### Requirements
+
+Make sure you have .NET Core 2.x installed --- See below for links for help.
+
+[Instructions for Windows](https://docs.microsoft.com/en-us/dotnet/core/windows-prerequisites?tabs=netcore2x)
+
+[Instructions for macOS](https://docs.microsoft.com/en-us/dotnet/core/macos-prerequisites?tabs=netcore2x)
+
+### Build Instructions
+
 Clone the repository. Run `dotnet build` to build, and `dotnet test test/**` to run tests. See below screenshot of it should look.
 
 ![alt text](images/build_output_core.png "Good Build Output")
