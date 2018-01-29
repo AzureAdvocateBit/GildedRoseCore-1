@@ -148,5 +148,34 @@ namespace GildedRose.Tests
             Assert.True(map[0] == 50);
             Assert.True(map[-1] == 0);
         }
+
+        [Fact]
+        public void Conjured_Items_Degrade_Twice_as_Fast_As_Normal()
+        {
+            items = new List<Item>
+            {
+                new Item {Name = "+5 Dexterity Vest", SellIn = 1, Quality = 10},
+                new Item {Name = "Conjured Mana Cake", SellIn = 1, Quality = 10}
+            };
+
+            items = inventoryManager.ProcessInventory(items);
+
+            Func<Item> getConjuredItem = () => items.Single(x => x.Name == "+5 Dexterity Vest");
+            Func<Item> getNormalItem = () => items.Single(x => x.Name == "Conjured Mana Cake");
+
+            Assert.True(getConjuredItem().SellIn == 0);
+            Assert.True(getConjuredItem().Quality == 8);
+
+            Assert.True(getNormalItem().SellIn == 0);
+            Assert.True(getNormalItem().Quality == 9);
+
+            items = inventoryManager.ProcessInventory(items);
+
+            Assert.True(getConjuredItem().SellIn == -1);
+            Assert.True(getConjuredItem().Quality == 4);
+
+            Assert.True(getNormalItem().SellIn == -1);
+            Assert.True(getNormalItem().Quality == 7);
+        }
     }
 }
