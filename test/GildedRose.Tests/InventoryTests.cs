@@ -16,11 +16,29 @@ namespace GildedRose.Tests
             items = new List<Item>();
         }
 
+        private IList<Item> DefaultItems()
+        {
+            return new List<Item>
+            {
+                new Item {Name = "+5 Dexterity Vest", SellIn = 10, Quality = 20},
+                new Item {Name = "Aged Brie", SellIn = 2, Quality = 0},
+                new Item {Name = "Elixir of the Mongoose", SellIn = 5, Quality = 7},
+                new Item {Name = "Sulfuras, Hand of Ragnaros", SellIn = 0, Quality = 80},
+                new Item
+                    {
+                        Name = "Backstage passes to a TAFKAL80ETC concert",
+                        SellIn = 15,
+                        Quality = 20
+                    },
+                new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6}
+            };
+        }
+
         [Fact]
         public void Purchase_Fills_Inventory()
         {
             Assert.Empty(items);
-            items = new SupplyManager().PurchaseDefaultSupplies();
+            items = DefaultItems();
             Assert.NotEmpty(items);
         }
 
@@ -45,7 +63,7 @@ namespace GildedRose.Tests
         [Fact]
         public void Quality_Is_Never_Negative()
         {
-            items = new SupplyManager().PurchaseDefaultSupplies();
+            items = DefaultItems();
             var maxSellIn = items.Max(x => x.Quality) + 1;
 
             for (int i = 0; i < maxSellIn; i++)
@@ -77,7 +95,7 @@ namespace GildedRose.Tests
         [Fact]
         public void Quality_Is_Never_Higher_Than_50_Except_Legendary()
         {
-            items = new SupplyManager().PurchaseDefaultSupplies();
+            items = DefaultItems();
 
             for (int i = 0; i < 50; i++)
             {
@@ -99,7 +117,7 @@ namespace GildedRose.Tests
         [Fact]
         public void Legendary_Never_Changes_Status()
         {
-            items = new SupplyManager().PurchaseDefaultSupplies();
+            items = DefaultItems();
             var initialLegendaryItem = items.Single(x => x.Name == "Sulfuras, Hand of Ragnaros");
 
             for (int i = 0; i < 50; i++)
