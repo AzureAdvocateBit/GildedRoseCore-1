@@ -190,4 +190,12 @@ namespace GildedRose.Tests
             this.InventoryManager = new LegacyInventoryManager();
         }
     }
+
+    public class HAL9000InventoryTests : InventoryTests
+    {
+        public HAL9000InventoryTests() : base()
+        {
+            this.InventoryManager = new HAL9000InventoryManager();
+        }
+    }
 }

@@ -14,7 +14,7 @@ namespace GildedRose.Console
 
             var app = new Program()
             {
-                InventoryManager = new LegacyInventoryManager(),
+                InventoryManager = new HAL9000InventoryManager(),
                 SupplyManager = new SupplyManager()
             };
             app.PurchaseNewSupplies();
