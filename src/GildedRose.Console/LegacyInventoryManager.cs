@@ -14,7 +14,14 @@ namespace GildedRose.Console
                     {
                         if (inventory[i].Name != "Sulfuras, Hand of Ragnaros")
                         {
-                            inventory[i].Quality = inventory[i].Quality - 1;
+                            if (!inventory[i].Name.StartsWith("Conjured"))
+                            {
+                                inventory[i].Quality = inventory[i].Quality - 1;
+                            }
+                            else
+                            {
+                                inventory[i].Quality = inventory[i].Quality - 2;
+                            }
                         }
                     }
                 }
@@ -60,7 +67,14 @@ namespace GildedRose.Console
                             {
                                 if (inventory[i].Name != "Sulfuras, Hand of Ragnaros")
                                 {
-                                    inventory[i].Quality = inventory[i].Quality - 1;
+                                    if (!inventory[i].Name.StartsWith("Conjured"))
+                                    {
+                                        inventory[i].Quality = inventory[i].Quality - 1;
+                                    }
+                                    else
+                                    {
+                                        inventory[i].Quality = inventory[i].Quality - 2;
+                                    }
                                 }
                             }
                         }
