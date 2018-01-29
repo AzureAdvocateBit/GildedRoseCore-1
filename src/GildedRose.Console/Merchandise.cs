@@ -1,10 +1,19 @@
 namespace GildedRose.Console
 {
+    /// <summary>
+    /// Shared specification for Merchandise.
+    /// </summary>
     interface IMerchandise
     {
+        /// <summary>
+        /// Update the internal state to reflect a new cycle/day.
+        /// </summary>
         void UpdateQuality();
     }
 
+    /// <summary>
+    /// The different merchandise types available.
+    /// </summary>
     public enum MerchandiseType
     {
         Normal,
@@ -14,6 +23,9 @@ namespace GildedRose.Console
         Legendary
     }
 
+    /// <summary>
+    /// Base class for merchandise, which handles the implementation of IMerchandise and inherits from Item for easy casting.
+    /// </summary>
     public abstract class Merchandise : Item, IMerchandise
     {
         protected const int BASE_QUALITY_STEP = 1;

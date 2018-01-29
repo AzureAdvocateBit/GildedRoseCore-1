@@ -3,14 +3,27 @@ using System.Collections.Generic;
 
 namespace GildedRose.Console
 {
+    /// <summary>
+    /// Alternative implementation to the reference `LegacyInventoryManager`.
+    /// The focus of this implementation is to provide code readability.
+    /// </summary>
     public class HAL9000InventoryManager : IInventoryManager
     {
+        /// <summary>
+        /// A dictionary of pre-defined items that have specific behavior.
+        /// Items are first matched to this map, before anything else.
+        /// </summary>
         public IDictionary<string, MerchandiseType> MerchandiseTypeMap { get; set; }
         public HAL9000InventoryManager()
         {
             MerchandiseTypeMap = GenerateMerchandiseMap();
         }
 
+        /// <summary>
+        /// Implementation of the IInventoryManager interface
+        /// </summary>
+        /// <param name="inventory">Input inventory list</param>
+        /// <returns>Processed inventory list</returns>
         public IList<Item> ProcessInventory(IList<Item> inventory)
         {
             var processedInventory = new List<Item>();
@@ -66,6 +79,11 @@ namespace GildedRose.Console
             return processedInventory;
         }
 
+        /// <summary>
+        /// Map of currently known Item types.
+        /// </summary>
+        /// <remarks>Does not include Conjured and Backstage passes - these are handled on the basis of their prefix</remarks>
+        /// <returns>A dictionary that matches item names with MerchandiseTypes</returns>
         private IDictionary<string, MerchandiseType> GenerateMerchandiseMap()
         {
             return new Dictionary<string, MerchandiseType>()

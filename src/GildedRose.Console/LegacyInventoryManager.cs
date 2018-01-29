@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace GildedRose.Console
 {
+    /// <summary>
+    /// The original implementation of an inventory manager - Written by a guy named Leeroy...
+    /// </summary>
     public class LegacyInventoryManager : IInventoryManager
     {
         public IList<Item> ProcessInventory(IList<Item> inventory)

@@ -2,11 +2,17 @@ using System.Collections.Generic;
 
 namespace GildedRose.Console
 {
+    /// <summary>
+    /// A manager which provides a method for obtaining new items into inventory.
+    /// </summary>
     public interface ISupplyManager
     {
         List<Item> PurchaseDefaultSupplies();
     }
 
+    /// <summary>
+    /// Default implementation of supply manager interface.
+    /// </summary>
     public class SupplyManager : ISupplyManager
     {
         public List<Item> PurchaseDefaultSupplies()
