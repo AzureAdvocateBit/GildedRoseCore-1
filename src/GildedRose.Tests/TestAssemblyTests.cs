@@ -48,7 +48,7 @@ namespace GildedRose.Tests
         public void Quality_Is_Never_Negative()
         {
             items = new SupplyManager().PurchaseDefaultSupplies();
-            var maxSellIn = items.Select(x => x.SellIn).OrderByDescending(x => x).First() + 1;
+            var maxSellIn = items.Select(x => x.Quality).OrderByDescending(x => x).First() + 1;
 
             for (int i = 0; i < maxSellIn; i++)
             {
