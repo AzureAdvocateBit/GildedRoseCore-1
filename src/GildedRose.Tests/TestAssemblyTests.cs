@@ -160,22 +160,28 @@ namespace GildedRose.Tests
 
             items = inventoryManager.ProcessInventory(items);
 
-            Func<Item> getConjuredItem = () => items.Single(x => x.Name == "+5 Dexterity Vest");
-            Func<Item> getNormalItem = () => items.Single(x => x.Name == "Conjured Mana Cake");
+            Func<Item> getConjuredItem = () => items.Single(x => x.Name == "Conjured Mana Cake");
+            Func<Item> getNormalItem = () => items.Single(x => x.Name == "+5 Dexterity Vest");
 
-            Assert.True(getConjuredItem().SellIn == 0);
-            Assert.True(getConjuredItem().Quality == 8);
+            var conjured = getConjuredItem();
+            var normal = getNormalItem();
 
-            Assert.True(getNormalItem().SellIn == 0);
-            Assert.True(getNormalItem().Quality == 9);
+            Assert.Equal(0, conjured.SellIn);
+            Assert.Equal(8, conjured.Quality);
+
+            Assert.Equal(0, normal.SellIn);
+            Assert.Equal(9, normal.Quality);
 
             items = inventoryManager.ProcessInventory(items);
 
-            Assert.True(getConjuredItem().SellIn == -1);
-            Assert.True(getConjuredItem().Quality == 4);
+            conjured = getConjuredItem();
+            normal = getNormalItem();
 
-            Assert.True(getNormalItem().SellIn == -1);
-            Assert.True(getNormalItem().Quality == 7);
+            Assert.Equal(-1, conjured.SellIn);
+            Assert.Equal(4, conjured.Quality);
+
+            Assert.Equal(-1, normal.SellIn);
+            Assert.Equal(7, normal.Quality);
         }
     }
 }
