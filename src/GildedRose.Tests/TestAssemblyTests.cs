@@ -6,16 +6,14 @@ using System.Linq;
 
 namespace GildedRose.Tests
 {
-
-    public class InventoryTests
+    public abstract class InventoryTests
     {
         IList<Item> items;
-        IInventoryManager inventoryManager;
+        protected IInventoryManager InventoryManager { get; set; }
 
         public InventoryTests()
         {
             items = new List<Item>();
-            inventoryManager = new LegacyInventoryManager();
         }
 
         [Fact]
@@ -35,13 +33,13 @@ namespace GildedRose.Tests
                 new Item {Name = "Elixir of the Mongoose", SellIn = 0, Quality = 7},
             };
 
-            items = inventoryManager.ProcessInventory(items);
+            items = InventoryManager.ProcessInventory(items);
 
             var vest = items.Single(x => x.Name == "+5 Dexterity Vest");
             var elixir = items.Single(x => x.Name == "Elixir of the Mongoose");
 
-            Assert.True(vest.Quality == 18);
-            Assert.True(elixir.Quality == 5);
+            Assert.Equal(18, vest.Quality);
+            Assert.Equal(5, elixir.Quality);
         }
 
         [Fact]
@@ -52,7 +50,7 @@ namespace GildedRose.Tests
 
             for (int i = 0; i < maxSellIn; i++)
             {
-                items = inventoryManager.ProcessInventory(items);
+                items = InventoryManager.ProcessInventory(items);
             }
             foreach (var item in items)
             {
@@ -68,12 +66,12 @@ namespace GildedRose.Tests
                 new Item {Name = "Aged Brie", SellIn = 2, Quality = 0}
             };
             
-            items = inventoryManager.ProcessInventory(items);
+            items = InventoryManager.ProcessInventory(items);
 
             var agedItem = items.Single(x => x.Name == "Aged Brie");
 
-            Assert.True(agedItem.Quality == 1);
-            Assert.True(agedItem.SellIn == 1);
+            Assert.Equal(1, agedItem.Quality);
+            Assert.Equal(1, agedItem.SellIn);
         }
 
         [Fact]
@@ -83,13 +81,13 @@ namespace GildedRose.Tests
 
             for (int i = 0; i < 50; i++)
             {
-                items = inventoryManager.ProcessInventory(items);
+                items = InventoryManager.ProcessInventory(items);
             }
             foreach (var item in items)
             {
                 if (item.Name == "Sulfuras, Hand of Ragnaros")
                 {
-                    Assert.True(item.Quality == 80);
+                    Assert.Equal(80, item.Quality);
                 }
                 else
                 {
@@ -106,10 +104,10 @@ namespace GildedRose.Tests
 
             for (int i = 0; i < 50; i++)
             {
-                items = inventoryManager.ProcessInventory(items);
+                items = InventoryManager.ProcessInventory(items);
                 var legendaryItem = items.Single(x => x.Name == "Sulfuras, Hand of Ragnaros");
                 Assert.True(legendaryItem.SellIn == initialLegendaryItem.SellIn);
-                Assert.True(legendaryItem.SellIn == 0);
+                Assert.Equal(0, legendaryItem.SellIn);
                 Assert.True(legendaryItem.Quality == initialLegendaryItem.Quality);
             }
         }
@@ -135,18 +133,18 @@ namespace GildedRose.Tests
             {
                 var item = getBackstagePass();
                 map[item.SellIn] = item.Quality;
-                items = inventoryManager.ProcessInventory(items);
+                items = InventoryManager.ProcessInventory(items);
             }
 
-            Assert.True(map[15] == 20);
-            Assert.True(map[11]-map[12] == 1);
-            Assert.True(map[11] == 24);
-            Assert.True(map[9]-map[10] == 2);
-            Assert.True(map[9] == 27);
-            Assert.True(map[4]-map[5] == 3);
-            Assert.True(map[4] == 38);
-            Assert.True(map[0] == 50);
-            Assert.True(map[-1] == 0);
+            Assert.Equal(20, map[15]);
+            Assert.Equal(1, map[11]-map[12]);
+            Assert.Equal(24, map[11]);
+            Assert.Equal(2, map[9]-map[10]);
+            Assert.Equal(27, map[9]);
+            Assert.Equal(3, map[4]-map[5]);
+            Assert.Equal(38, map[4]);
+            Assert.Equal(50, map[0]);
+            Assert.Equal(0, map[-1]);
         }
 
         [Fact]
@@ -158,7 +156,7 @@ namespace GildedRose.Tests
                 new Item {Name = "Conjured Mana Cake", SellIn = 1, Quality = 10}
             };
 
-            items = inventoryManager.ProcessInventory(items);
+            items = InventoryManager.ProcessInventory(items);
 
             Func<Item> getConjuredItem = () => items.Single(x => x.Name == "Conjured Mana Cake");
             Func<Item> getNormalItem = () => items.Single(x => x.Name == "+5 Dexterity Vest");
@@ -172,7 +170,7 @@ namespace GildedRose.Tests
             Assert.Equal(0, normal.SellIn);
             Assert.Equal(9, normal.Quality);
 
-            items = inventoryManager.ProcessInventory(items);
+            items = InventoryManager.ProcessInventory(items);
 
             conjured = getConjuredItem();
             normal = getNormalItem();
@@ -182,6 +180,14 @@ namespace GildedRose.Tests
 
             Assert.Equal(-1, normal.SellIn);
             Assert.Equal(7, normal.Quality);
+        }
+    }
+
+    public class LegacyInventoryTests : InventoryTests
+    {
+        public LegacyInventoryTests() : base()
+        {
+            this.InventoryManager = new LegacyInventoryManager();
         }
     }
 }
