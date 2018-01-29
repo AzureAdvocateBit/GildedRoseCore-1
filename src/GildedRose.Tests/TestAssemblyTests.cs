@@ -48,7 +48,7 @@ namespace GildedRose.Tests
         public void Quality_Is_Never_Negative()
         {
             items = new SupplyManager().PurchaseDefaultSupplies();
-            var maxSellIn = items.Select(x => x.Quality).OrderByDescending(x => x).First() + 1;
+            var maxSellIn = items.Max(x => x.Quality) + 1;
 
             for (int i = 0; i < maxSellIn; i++)
             {
@@ -58,6 +58,95 @@ namespace GildedRose.Tests
             {
                 Assert.True(item.Quality >= 0);
             }
+        }
+
+        [Fact]
+        public void Aged_Items_Increase_Quality_On_Aging()
+        {
+            items = new List<Item>
+            {
+                new Item {Name = "Aged Brie", SellIn = 2, Quality = 0}
+            };
+            
+            items = inventoryManager.ProcessInventory(items);
+
+            var agedItem = items.Single(x => x.Name == "Aged Brie");
+
+            Assert.True(agedItem.Quality == 1);
+            Assert.True(agedItem.SellIn == 1);
+        }
+
+        [Fact]
+        public void Quality_Is_Never_Higher_Than_50_Except_Legendary()
+        {
+            items = new SupplyManager().PurchaseDefaultSupplies();
+
+            for (int i = 0; i < 50; i++)
+            {
+                items = inventoryManager.ProcessInventory(items);
+            }
+            foreach (var item in items)
+            {
+                if (item.Name == "Sulfuras, Hand of Ragnaros")
+                {
+                    Assert.True(item.Quality == 80);
+                }
+                else
+                {
+                    Assert.True(item.Quality <= 50);
+                }
+            }
+        }
+
+        [Fact]
+        public void Legendary_Never_Changes_Status()
+        {
+            items = new SupplyManager().PurchaseDefaultSupplies();
+            var initialLegendaryItem = items.Single(x => x.Name == "Sulfuras, Hand of Ragnaros");
+
+            for (int i = 0; i < 50; i++)
+            {
+                items = inventoryManager.ProcessInventory(items);
+                var legendaryItem = items.Single(x => x.Name == "Sulfuras, Hand of Ragnaros");
+                Assert.True(legendaryItem.SellIn == initialLegendaryItem.SellIn);
+                Assert.True(legendaryItem.SellIn == 0);
+                Assert.True(legendaryItem.Quality == initialLegendaryItem.Quality);
+            }
+        }
+
+        [Fact]
+        public void Backstage_Pass_Quality_Surges_Until_Event_And_Then_Drop()
+        {
+            items = new List<Item>
+            {
+                new Item
+                {
+                    Name = "Backstage passes to a TAFKAL80ETC concert",
+                    SellIn = 15,
+                    Quality = 20
+                }
+            };
+            var maxSellIn = items.Max(i => i.SellIn);
+
+            Func<Item> getBackstagePass = () => items.Single(i => i.Name == "Backstage passes to a TAFKAL80ETC concert");
+            Dictionary<int, int> map = new Dictionary<int, int>();
+
+            for (int i = 0; i < maxSellIn + 2; i++)
+            {
+                var item = getBackstagePass();
+                map[item.SellIn] = item.Quality;
+                items = inventoryManager.ProcessInventory(items);
+            }
+
+            Assert.True(map[15] == 20);
+            Assert.True(map[11]-map[12] == 1);
+            Assert.True(map[11] == 24);
+            Assert.True(map[9]-map[10] == 2);
+            Assert.True(map[9] == 27);
+            Assert.True(map[4]-map[5] == 3);
+            Assert.True(map[4] == 38);
+            Assert.True(map[0] == 50);
+            Assert.True(map[-1] == 0);
         }
     }
 }
