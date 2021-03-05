@@ -50,9 +50,9 @@ Quality is 80 and it never alters.
 
 Make sure you have .NET Core 2.x installed --- See below for links for help.
 
-[Instructions for Windows](https://docs.microsoft.com/en-us/dotnet/core/windows-prerequisites?tabs=netcore2x)
+[Instructions for Windows](https://docs.microsoft.com/dotnet/core/windows-prerequisites?tabs=netcore2x&WT.mc_id=java-0000-ropreddy)
 
-[Instructions for macOS](https://docs.microsoft.com/en-us/dotnet/core/macos-prerequisites?tabs=netcore2x)
+[Instructions for macOS](https://docs.microsoft.com/dotnet/core/macos-prerequisites?tabs=netcore2x&WT.mc_id=java-0000-ropreddy)
 
 ### Build Instructions
 
